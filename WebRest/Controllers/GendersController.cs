@@ -79,12 +79,18 @@ namespace WebRest.Controllers
         // POST: api/Genders
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Gender>> Post(Gender gender)
+        public async Task<ActionResult<Gender>> Post([FromBody] Gender gender)
         {
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             _context.Genders.Add(gender);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetGender", new { id = gender.GenderId }, gender);
+            return CreatedAtAction("Get", new { id = gender.GenderId }, gender);
         }
 
         // DELETE: api/Genders/5
